@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Login</title>
+</head>
+
+<body>
+  <form action="/register" method="POST" onsubmit="return check()">
+    <p>Username : <input type="text" name="username"></p>
+    <p>Password : <input type="password" name="password"></p>
+    <p>Password Confirm : <input type="password" name="password-confirm"></p>
+    <input type="submit" value="Register">
+  </form>
+
+  <script>
+    function check() {
+      if (document.getElementsByName('username')[0].value == '') {
+        alert("Empty name!");
+        return false;
+      }
+      if (document.getElementsByName('password')[0].value == '') {
+        alert('Empty password!');
+        return false;
+      }
+      if (document.getElementsByName('password-confirm')[0].value == '') {
+        alert('Empty password confirm!');
+        return false;
+      }
+      if (document.getElementsByName('password')[0].value != document.getElementsByName('password-confirm')[0].value) {
+        alert('No match password!');
+        return false;
+      }
+      return true;
+    }
+  </script>
+</body>
+
+</html>

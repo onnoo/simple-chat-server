@@ -1,0 +1,25 @@
+{
+  "name": "simple-chat-server",
+  "version": "1.0.0",
+  "description": "open source desktop chat server",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/onnoo/simple-chat-server.git"
+  },
+  "author": "onnoo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/onnoo/simple-chat-server/issues"
+  },
+  "homepage": "https://github.com/onnoo/simple-chat-server#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "ejs": "^2.6.1",
+    "express": "^4.17.0",
+    "mysql": "^2.17.1"
+  }
+}
