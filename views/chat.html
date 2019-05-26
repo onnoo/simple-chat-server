@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Chatting</title>
+</head>
+
+<body>
+  <h1>Socket.io Chat</h1>
+  <div id="chatlog"></div>
+  <form>
+    <label for="msgForm">Message: </label>
+    <input type="text" id="msgForm">
+    <button type="submit">Send</button>
+  </form>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      var socket = io();
+
+      socket.emit("login", {
+        username: "<%= username%>"
+      });
+
+      socket.on("login", function (data) {
+        $("#chatlog").append("<div><strong>" + data + "</strong> has joined</div>");
+      });
+
+      socket.on("chat", function (data) {
+        $("#chatlog").append("<div><string>" + data.username + "</strong> : " + data.msg + "</div>");
+      });
+
+      $("form").submit(function (e) {
+        e.preventDefault();
+        var $msgForm = $("#msgForm");
+
+        socket.emit("chat", { msg: $msgForm.val() });
+        $msgForm.val("");
+      });
+    });
+  </script>
+</body>
+
+</html>

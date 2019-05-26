@@ -1,8 +1,12 @@
 var express = require('express');
 var mysql = require('mysql');
 var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
 
 var app = express();
+var server = require('http').createServer(app);
+var io = require('socket.io')(server);
+
 var connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
@@ -11,6 +15,7 @@ var connection = mysql.createConnection({
 });
 
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
 
 app.set('views', __dirname + '/views');
 
@@ -27,6 +32,15 @@ app.get('/register', function (req, res) {
   res.render('register.html');
 });
 
+app.get('/chat', function (req, res) {
+  if (!req.cookies.username)
+    res.send('please login.');
+  else {
+    console.log(req.cookies.username);
+    res.render('chat.html', { username: req.cookies.username });
+  }
+});
+
 app.post('/login', function (req, res) {
   var username = req.body.username;
   var password = req.body.password;
@@ -36,8 +50,10 @@ app.post('/login', function (req, res) {
     if (results.length == 0) {
       res.send('Non exist username');
     } else {
-      if (results[0].password == password)
-        res.send('Hello, ' + username + ' !');
+      if (results[0].password == password) {
+        res.cookie('username', username);
+        res.redirect('/chat');
+      }
       else
         res.send('Wrong password');
     }
@@ -54,6 +70,36 @@ app.post('/register', function (req, res) {
   });
 });
 
+// SOCKET IO
+io.on('connection', function (socket) {
+  socket.on('login', function (data) {
+    console.log('client logged-in:' + data.username);
+
+    socket.username = data.username;
+
+    io.emit('login', data.username);
+  });
+
+  socket.on('chat', function (data) {
+    console.log('Message form %s: %s', socket.username, data.msg);
+
+    var msg = {
+      username: socket.username,
+      msg: data.msg
+    };
+
+    io.emit('chat', msg);
+  });
+
+  socket.on('forceDisconnect', function () {
+    socket.disconnect();
+  });
+
+  socket.on('disconnect', function () {
+    console.log('user disconnected: ' + socket.name);
+  });
+});
+
 connection.connect(function (err) {
   if (err) {
     console.error('error connecting: ' + err.stack);
@@ -63,6 +109,6 @@ connection.connect(function (err) {
   console.log('connection as id ' + connection.threadId);
 });
 
-app.listen(3000, function () {
+server.listen(3000, function () {
   console.log('Example app listening on port 3000!');
 });
