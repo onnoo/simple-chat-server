@@ -2,16 +2,31 @@
 <html lang="en">
 
 <head>
-    <title>Login</title>
+  <title>Login</title>
+  <link type="text/css" rel="stylesheet" href="css/uikit.min.css" />
+  <script src="js/uikit.min.js"></script>
+  <script src="js/uikit-icons.min.js"></script>
+  <style type="text/css">
+    html,
+    body {
+      height: 100%;
+      overflow: hidden
+    }
+
+  </style>
 </head>
 
-<body>
+<body class="uk-flex uk-flex-center uk-flex-middle uk-background-primary">
+  <div class="uk-card uk-card-body uk-card-default uk-card-small uk-width-medium">
     <form action="/login" method="POST">
-        <p>Username : <input type="text" name="username"></p>
-        <p>Password : <input type="password" name="password"></p>
-        <input type="submit" value="Login">
+      <label class="uk-form-label">Username</label>
+      <input class="uk-input" type="text" name="username">
+      <label class="uk-form-label">Password</label>
+      <input class="uk-input" type="password" name="password">
+      <button class="uk-margin-small-top uk-button uk-button-default uk-button-primary uk-width-1-1" type="submit">Login</button>
+      <button class="uk-margin-small-top uk-button uk-button-default uk-button-secondary uk-width-1-1" type="button" onclick="location.href='/register'">Register</button>
     </form>
-    <button type="button" onclick="location.href='/register' ">Register</button>
+  </div>
 </body>
 
 </html>

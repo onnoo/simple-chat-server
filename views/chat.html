@@ -4,42 +4,71 @@
 <head>
   <meta charset="UTF-8">
   <title>Chatting</title>
+  <link type="text/css" rel="stylesheet" href="css/uikit.min.css" />
+  <script src="js/uikit.min.js"></script>
+  <script src="js/uikit-icons.min.js"></script>
+  <style type="text/css">
+    html,
+    body {
+      height: 100%;
+      overflow: hidden
+    }
+
+    button:focus {
+      outline: 0;
+    }
+
+  </style>
 </head>
 
-<body>
-  <h1>Socket.io Chat</h1>
-  <div id="chatlog"></div>
-  <form>
-    <label for="msgForm">Message: </label>
-    <input type="text" id="msgForm">
-    <button type="submit">Send</button>
-  </form>
+<body class="uk-flex uk-flex-center uk-flex-middle uk-background-primary">
+  <div class="uk-card uk-card-body uk-card-default uk-card-small uk-width-xlarge">
+    <h1>Socket.io Chat</h1>
+    <div id="chatpanel" class="uk-panel uk-panel-scrollable uk-width-1-1" style="min-width: 100%; max-height: 300px; min-height: 100px; height: 300px;">
+      <ul id="chatlog" class="uk-list">
+      </ul>
+    </div>
+    <form id="myform">
+      <div class="uk-margin-small-top">
+        <div class="uk-inline uk-width-1-1">
+          <button class="uk-form-icon uk-form-icon-flip" uk-icon="icon: pencil" type="submit"></button>
+          <input class="uk-input" type="text" id="msgForm">
+        </div>
+      </div>
+      <!-- <div class="uk-child-width-expand " uk-grid>
+        <label for="msgForm">Message: </label>
+        <input class="uk-input uk-width-1-2" type="text" id="msgForm">
+        <button class="uk-button-primary" type="submit">Send</button>
+      </div> -->
+    </form>
+  </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
   <script src="/socket.io/socket.io.js"></script>
   <script type="text/javascript">
     $(function () {
       var socket = io();
-
       socket.emit("login", {
         username: "<%= username%>"
       });
-
       socket.on("login", function (data) {
-        $("#chatlog").append("<div><strong>" + data + "</strong> has joined</div>");
+        $("#chatlog").append("<li><strong>" + data + "</strong> has joined</li>");
       });
-
       socket.on("chat", function (data) {
-        $("#chatlog").append("<div><string>" + data.username + "</strong> : " + data.msg + "</div>");
+        $("#chatlog").append("<li><string>" + data.username + "</strong> : " + data.msg + "</li>");
+        // Chatting panel scroll to bottom
+        var objDiv = document.getElementById("chatpanel");
+        objDiv.scrollTop = objDiv.scrollHeight;
       });
-
       $("form").submit(function (e) {
         e.preventDefault();
         var $msgForm = $("#msgForm");
-
-        socket.emit("chat", { msg: $msgForm.val() });
+        socket.emit("chat", {
+          msg: $msgForm.val()
+        });
         $msgForm.val("");
       });
     });
+
   </script>
 </body>
 
