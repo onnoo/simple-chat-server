@@ -53,6 +53,9 @@
       socket.on("login", function (data) {
         $("#chatlog").append("<li><strong>" + data + "</strong> has joined</li>");
       });
+      socket.on("logout", function (data) {
+        $("#chatlog").append("<li><strong>" + data + "</strong> has exited</li>");
+      });
       socket.on("chat", function (data) {
         $("#chatlog").append("<li><string>" + data.username + "</strong> : " + data.msg + "</li>");
         // Chatting panel scroll to bottom

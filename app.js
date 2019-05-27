@@ -99,7 +99,8 @@ io.on('connection', function (socket) {
   });
 
   socket.on('disconnect', function () {
-    console.log('user disconnected: ' + socket.name);
+    socket.broadcast.emit('logout', socket.username);
+    console.log('user disconnected: ' + socket.username);
   });
 });
 
