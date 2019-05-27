@@ -14,7 +14,9 @@ var connection = mysql.createConnection({
   database: 'my_db'
 });
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 app.use(cookieParser());
 
 app.set('views', __dirname + '/views');
@@ -37,7 +39,9 @@ app.get('/chat', function (req, res) {
     res.send('please login.');
   else {
     console.log(req.cookies.username);
-    res.render('chat.html', { username: req.cookies.username });
+    res.render('chat.html', {
+      username: req.cookies.username
+    });
   }
 });
 
@@ -53,8 +57,7 @@ app.post('/login', function (req, res) {
       if (results[0].password == password) {
         res.cookie('username', username);
         res.redirect('/chat');
-      }
-      else
+      } else
         res.send('Wrong password');
     }
   });
